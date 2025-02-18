@@ -1,15 +1,11 @@
-<<<<<<< HEAD
 # compiled output
 /dist
 /node_modules
-
-=======
->>>>>>> 3fd81ff1f2df239c589376f29ef386c16bb634cc
 # Logs
 logs
 *.log
-npm-debug.log*
-<<<<<<< HEAD
+npm-debug.log*  
+
 pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -39,7 +35,9 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 .env
-=======
+.env.production
+.env.development
+
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
@@ -131,6 +129,7 @@ dist
 
 # Gatsby files
 .cache/
+
 # Comment in the public line in if your project uses Gatsby and not Next.js
 # https://nextjs.org/blog/next-9-1#public-directory-support
 # public
@@ -166,4 +165,3 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
->>>>>>> 3fd81ff1f2df239c589376f29ef386c16bb634cc
