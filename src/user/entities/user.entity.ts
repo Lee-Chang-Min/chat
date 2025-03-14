@@ -1,41 +1,31 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinTable,
-  OneToMany,
-  ManyToMany,
-} from 'typeorm';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 
-import { Room } from 'src/room/entities/room.entity';
-import { Message } from 'src/room/entities/message.entity';
+import { Room } from 'src/room/schema/room.schema';
+import { Message } from 'src/room/schema/message.schema';
 
-@Entity()
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ length: 20 })
+@Schema()
+export class User extends Document {
+  @Prop()
   username: string;
 
-  @Column({ length: 60 })
+  @Prop()
   password: string;
 
-  @Column()
+  @Prop()
   avatar: string;
 
-  @Column()
+  @Prop({ default: false })
   is_admin: boolean;
 
-  @JoinTable()
-  @ManyToOne(() => Room, (room: Room) => room.users)
-  room: Room;
+  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Message' }] })
+  messages: Message[];
 
-  @JoinTable()
-  @ManyToMany(() => Room, (room: Room) => room.bannedUsers, { eager: true })
-  bannedRooms: Array<Room>;
-
-  @OneToMany(() => Message, (message: Message) => message.user)
-  messages: Array<Message>;
+  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }] })
+  contacts: User[];
+  
+  @Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'User' }] })
+  blockedUsers: User[];
 }
+
+export const UserSchema = SchemaFactory.createForClass(User);

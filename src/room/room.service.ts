@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 
-import { Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 import { UserService } from 'src/user/user.service';
 
-import { Room } from './entities/room.entity';
-import { Message } from './entities/message.entity';
+import { Room, RoomDocument } from './schema/room.schema';
+import { Message, MessageDocument } from './schema/message.schema';
 
 import { AddMessageDto } from 'src/chat/dto/add-message.dto';
 import { CreateRoomDto } from 'src/room/dto/create-room.dto';
@@ -15,21 +15,28 @@ import { BanUserDto } from 'src/chat/dto/ban-user.dto';
 
 @Injectable()
 export class RoomService {
+  /* 
+   @InjectModel(Room.name):
+   @InjectModel을 사용하여 Mongoose 모델을 주입받습니다.
+   Room.name은 Room 모델의 이름입니다. Mongoose는 자동으로 모델 이름을 기반으로 컬렉션을 찾습니다. 
+   따라서, Room 모델에 대해 Room.name을 사용하여 주입합니다.
+  */
+ 
   constructor(
-    @InjectRepository(Room) private readonly roomRepository: Repository<Room>,
-    @InjectRepository(Message)
-    private readonly messageRepository: Repository<Message>,
-    private readonly userService: UserService,
+    @InjectModel(Room.name) private readonly roomModel: Model<RoomDocument>,
+    @InjectModel(Message.name) private readonly messageModel: Model<MessageDocument>,
   ) {}
 
-  async findAll() {
-    const rooms = await this.roomRepository.find({ relations: ['messages'] });
 
-    return rooms;
+
+  // 모든 채팅방 목록을 조회합니다 (삭제되지 않은 채팅방만)
+  async findAll(): Promise<Room[]> {
+    return this.roomModel.find({ isDeleted: false }).sort({ lastMessageAt: -1 }).exec();
   }
 
+
   async findOne(id: string) {
-    const room = await this.roomRepository.findOne(id);
+    const room = await this.roomModel.findById(id).exec();
 
     if (!room) {
       throw new NotFoundException(`There is no room under id ${id}`);

@@ -8,7 +8,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 
 import { AppModule } from './app.module';
-import { AuthIoAdapter } from './chat/adapters/auth.adapter';
+// import { AuthIoAdapter } from './chat/adapters/auth.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,7 +23,7 @@ async function bootstrap() {
   );
 
   // WebSocket 인증 어댑터 설정
-  app.useWebSocketAdapter(new AuthIoAdapter(app));
+  // app.useWebSocketAdapter(new AuthIoAdapter(app));
 
   // Swagger API 문서 설정
   const options = new DocumentBuilder()

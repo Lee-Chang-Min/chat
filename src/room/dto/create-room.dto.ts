@@ -1,16 +1,20 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 export class CreateRoomDto {
-  @IsString()
-  readonly name: string;
+  @IsArray()
+  @IsString({ each: true })
+  readonly participants: string[]; // 채팅방 참여자 ID 배열 (필수)
 
-  @IsString()
-  readonly description: string;
-
-  @IsString()
-  readonly avatar: string;
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  readonly blockedUsers?: string[]; // 차단된 사용자 ID 배열 (선택)
 
   @IsOptional()
   @IsString()
-  ownerId?: string;
+  readonly lastMessageText?: string; // 마지막 메시지 내용 (선택)
+
+  @IsOptional()
+  @IsString()
+  readonly lastMessageSenderId?: string; // 마지막 메시지 보낸 사용자 ID (선택)
 }

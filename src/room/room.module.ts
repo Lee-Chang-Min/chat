@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserModule } from 'src/user/user.module';
 
-import { Room } from './entities/room.entity';
-import { Message } from './entities/message.entity';
+import { Room } from './schema/room.schema';
+import { Message } from './schema/message.schema';
 
 import { RoomController } from './room.controller';
 
